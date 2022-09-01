@@ -35,8 +35,11 @@ Device  Boot StartCHS    EndCHS        StartLBA     EndLBA    Sectors  Size Id T
 
 We can't see the extended partition on the host as it is a new one reserved for LFS so it is not mounted on the host. The configuration file to choose which disk is mounted at startup is `/etc/fstab` and we will set it on lfs system later.
 In order to start to build the lfs system, we create a directory at `/mnt/lfs` and mount the root and boot disks on it as follow ($LFS=/mnt/lfs):
+
 `mount -v -t ext4 /dev/sda5 $LFS`
+
 `mount -v -t ext4 /dev/sda6 $LFS/boot`
+
 `swapon /dev/sda7`
 
 `mount` (information on mounted disks)
@@ -47,8 +50,11 @@ Now the extended partition is accessible from the host.
 
 ### Environnment
 Create a lfs user with rights on lfs filesystem by saying lfs user is the owner of it.
+
 `adduser lfs`
-`chown -v lfs $LFS/{usr{,/*},lib,var,etc,bin,sbin,tools}` 
+
+`chown -v lfs $LFS/{usr{,/*},lib,var,etc,bin,sbin,tools}`
+
 `chown -v lfs $LFS/sources`
 
 ### Compilation
@@ -63,6 +69,7 @@ sys	0m26.999s
 *This is my SBU time result*
 
 There is two ways to indicate to `make` to use many processors at compilation time to accelerate the building:
+
 `export MAKEFLAGS='-j4'` or `make -j4`
 
 
@@ -94,12 +101,15 @@ chroot "$LFS" /usr/bin/env -i   \
 > On Linux-based systems, the /dev directory is used to hold file-based devices, "nodes", which refer to system devices. Each "node" refers to a device, which may or may not exist. User applications can use these "nodes" to interact with the device. For example, the X graphics server will "listen" to /dev/input/mice which refers to the mouse and move the pointer on the screen.
 
 **udev**
+
 Udev is the new system for managing the /dev directory, designed to overcome the limitations put forward by previous versions of /dev, and provide a robust link. In order to create and name the devices in /dev, the "nodes" which correspond to system devices, udev makes the link between the information given by sysfs and the rules given by the user.
 
 **sysfs**
+
 Sysfs has been made official with the 2.6 series kernels. It is managed by the kernel to export basic information about devices currently connected to the system. Udev uses this information to create the 'nodes' corresponding to the peripherals of your computer. Sysfs is mounted on /sys and you can browse it: you can look at these files before diving into udev.
 
 **systemd**
+
 It is the first program launched by the kernel (therefore it has the PID N°1) and it is responsible for launching all the following programs in order until obtaining an operational system for the user, according to the determined mode (single user, multi-user, graphic). It is also responsible for restarting or shutting down your computer properly.
 It was developed in order to better understand the management of a multitasking system, particularly in terms of dependency between the different services launched at startup with the main objective of optimizing system performance.
 Its role is more extensive than Upstart, it also manages the mounting of different file systems and introduces a new log system called "The Journal".
@@ -111,7 +121,7 @@ Most BIOS implementations are specifically designed to work with a particular co
 Unified Extensible Firmware Interface (UEFI) is a successor to the legacy PC BIOS, aiming to address its technical limitations.
 
 https://en.wikipedia.org/wiki/BIOS
-![42aa6be3455d9fe99e691b1cb34d9730.jpg](../_resources/42aa6be3455d9fe99e691b1cb34d9730.jpg)
+![42aa6be3455d9fe99e691b1cb34d9730.jpg](./_resources/42aa6be3455d9fe99e691b1cb34d9730.jpg)
 
 **UEFI**
 > The Unified Extensible Firmware Interface (UEFI) is a publicly available specification that defines a software interface between an operating system and platform firmware. UEFI replaces the legacy Basic Input/Output System (BIOS) boot firmware originally present in all IBM PC-compatible personal computers, with most UEFI firmware implementations providing support for legacy BIOS services. UEFI can support remote diagnostics and repair of computers, even with no operating system installed.
@@ -125,18 +135,18 @@ https://en.wikipedia.org/wiki/BIOS
 > - Backward and forward compatibility
 
 https://en.wikipedia.org/wiki/UEFI
-![89e5585a5b087cb3164410538844d85f.jpg](../_resources/89e5585a5b087cb3164410538844d85f.jpg)
+![89e5585a5b087cb3164410538844d85f.jpg](./_resources/89e5585a5b087cb3164410538844d85f.jpg)
 
 **/boot/**
 > In Linux, and other Unix-like operating systems, the /boot/ directory holds files used in booting the operating system. The usage is standardized in the Filesystem Hierarchy Standard.
 > The contents are mostly Linux kernel files or boot loader files, depending on the boot loader, most commonly (on Linux) LILO or GRUB.
 
->**Linux**
+>**Linux** \
 > - `vmlinux` – the Linux kernel
 > - `initrd.img` – a temporary file system, used prior to loading the kernel
 > - `System.map` – a symbol lookup table
 
->**GRUB**
+>**GRUB** \
 GRUB stores its files in the subdirectory grub/ (i.e. /boot/grub/). These files are mostly modules (.mod), with configuration stored in grub.cfg. 
 
 > /boot/ is often simply a directory on the main (or only) hard drive partition. However, it may be a separate partition.
